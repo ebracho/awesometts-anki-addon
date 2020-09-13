@@ -343,7 +343,6 @@ addon = Bundle(
             'hint_links',
             ('hint_content', 'otf_remove_hints'),
             ('newline_ellipsize', 'ellip_template_newlines'),
-            'html',
         ] + STRIP_TEMPLATE_POSTHTML, config=config, logger=logger),
 
         # for cleaning up text from unknown sources (e.g. system clipboard);

@@ -295,6 +295,7 @@ class Azure(Service):
 
         rate = options['speed']
 
+
         base_url = f'https://{region}.tts.speech.microsoft.com/'
         url_path = 'cognitiveservices/v1'
         constructed_url = base_url + url_path
@@ -305,23 +306,10 @@ class Azure(Service):
             'User-Agent': 'anki-awesome-tts'
         }
 
-        xml_body = ElementTree.Element('speak', version='1.0')
-
-        xml_body.set('{http://www.w3.org/XML/1998/namespace}lang', language)
-        voice = ElementTree.SubElement(xml_body, 'voice')
-        voice.set('{http://www.w3.org/XML/1998/namespace}lang', language)
-        voice.set(
-            'name', voice_name)
-
-        prosody = ElementTree.SubElement(voice, 'prosody')
-        prosody.set('rate', rate)
-
-        prosody.text = text
-        body = ElementTree.tostring(xml_body)
-
+        body = f'<speak version="1.0" xml:lang="{language}"><voice name="{voice_name}"><prosody rate="{rate}">{text}</prosody></voice></speak>'
         self._logger.info(f"xml request: {body}")
 
-        response = requests.post(constructed_url, headers=headers, data=body)
+        response = requests.post(constructed_url, headers=headers, data=body.encode())
         if response.status_code == 200:
             with open(path, 'wb') as audio:
                 audio.write(response.content)
